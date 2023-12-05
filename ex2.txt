@@ -1,0 +1,26 @@
+def maxrect(matrix):
+    if not matrix or not matrix[0]:
+        return 0
+
+    m, n = len(matrix), len(matrix[0])
+    heights = [0] * n
+    max_area = 0
+
+    for i in range(m):
+        heights = [heights[j] + 1 if matrix[i][j] == '1' else 0 for j in range(n)]
+
+        stack = []
+        for j in range(n + 1):
+            while stack and (j == n or heights[j] < heights[stack[-1]]):
+                height = heights[stack.pop()]
+                width = stack[-1] if stack else -1
+                max_area = max(max_area, height * (j - width - 1))
+            stack.append(j)
+
+    return max_area
+
+# Test cases
+matrix1 = [["0"]]
+matrix2 = [["0", "1"], ["1", "0"]]
+print(maxrect(matrix1)) 
+print(maxrect(matrix2)) 
